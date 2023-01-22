@@ -1,0 +1,13 @@
+.background-choose {
+  display: flex;
+  gap: 10px;
+  &__item {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding: 5px;
+    &_active {
+      border: 2px solid #a142f4;
+    }
+  }
+}

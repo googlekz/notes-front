@@ -1,0 +1,12 @@
+.app {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 50px 30px;
+  &__notes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px 15px;
+  }
+}

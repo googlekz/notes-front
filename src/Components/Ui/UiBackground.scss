@@ -1,0 +1,30 @@
+.background-item {
+  &__color {
+    position: relative;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding: 5px;
+    color: white;
+    display: flex;
+    align-items: center;
+    &_active {
+      border: 2px solid #a142f4;
+      .background-item__check {
+        display: block;
+        position: absolute;
+        top: -4px;
+        right: -4px;
+      }
+    }
+  }
+  &__check {
+    fill: currentColor;
+    width: 12px;
+    height: 12px;
+    background: #a142f4;
+    border-radius: 50%;
+    display: none;
+  }
+}

@@ -1,0 +1,47 @@
+.menu-item {
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  background: none;
+  border-bottom: 1px solid #dadada;
+  position: relative;
+  cursor: pointer;
+
+  &__text {
+    padding: 10px 0;
+    display: flex;
+    gap: 10px;
+    &_count {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      font-size: 12px;
+      align-items: center;
+      display: flex;
+      background: #c74c4c;
+      justify-content: center;
+      color: white;
+    }
+  }
+  &_active {
+    background: #7dc271;
+    color: white;
+    .menu-item__text {
+      padding: 10px 15px;
+    }
+  }
+  &:before {
+    margin-right: 5px;
+    height: 100%;
+  }
+  &__delete {
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+  }
+  &:hover {
+    .menu-item__delete {
+      display: block;
+    }
+  }
+}
