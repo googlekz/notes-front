@@ -1,1 +1,1 @@
-export const mainUrl = "http://node-express-env.eba-3h2pcem4.us-east-1.elasticbeanstalk.com"
+export const mainUrl = "https://d23ed29gtkm78.cloudfront.net"
