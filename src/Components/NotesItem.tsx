@@ -1,39 +1,42 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import UiTag from './Ui/UiTag'
 import './NotesItem.scss'
 import UiDelete from './Ui/UiDelete'
 
-const NotesItem = ({ item, deleteItem }: any) => {
-  const getBackground = () => {
-    return {
-      background: item.background || null
+const NotesItem = ({item, deleteItem}: any) => {
+    const getBackground = () => {
+        return {
+            background: item.background || null
+        }
     }
-  }
 
-  const getText = () => {
-    return setLinksInStr(item.text)
-  }
-
-  const setLinksInStr = (str: string) => {
-    let localStr = str
-    const arrLinks: string[] | null = localStr.match(/https:\/\/[\w\-./]+/g)
-    if ((arrLinks != null) && arrLinks.length > 0) {
-      arrLinks.forEach((item: string) => {
-        localStr = localStr.replace(item, addLink(item))
-      })
+    const getText = () => {
+        return setLinksInStr(item.text)
     }
-    return localStr
-  }
 
-  const addLink = (str: string) => {
-    return `<a href="${str}" target="_blank">${str}</a>`
-  }
+    const setLinksInStr = (str: string) => {
+        let localStr = str;
+        if (!localStr) {
+            return localStr
+        }
+        const arrLinks: string[] | null = localStr.match(/https:\/\/[\w\-./]+/g)
+        if ((arrLinks != null) && arrLinks.length > 0) {
+            arrLinks.forEach((item: string) => {
+                localStr = localStr.replace(item, addLink(item))
+            })
+        }
+        return localStr
+    }
 
-  const deleteNote = () => {
-    deleteItem(item.id)
-  }
+    const addLink = (str: string) => {
+        return `<a href="${str}" target="_blank">${str}</a>`
+    }
 
-  return (
+    const deleteNote = () => {
+        deleteItem(item.id)
+    }
+
+    return (
         <div
             className="notes"
             style={getBackground()}
@@ -43,10 +46,10 @@ const NotesItem = ({ item, deleteItem }: any) => {
                 onClick={deleteNote}
             />
             <h4 className="notes__title">{item.title}</h4>
-            <p className="notes__text" dangerouslySetInnerHTML={{ __html: getText() }}></p>
+            <p className="notes__text" dangerouslySetInnerHTML={{__html: getText()}}></p>
             <div className="notes__buttons">
                 {
-                    item.groups.map((group: any) =>
+                    item.groups?.map((group: any) =>
                         <UiTag
                             key={group.id}
                             item={group}
@@ -55,7 +58,7 @@ const NotesItem = ({ item, deleteItem }: any) => {
                 }
             </div>
         </div>
-  )
+    )
 }
 
 export default NotesItem
