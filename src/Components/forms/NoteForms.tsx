@@ -41,7 +41,7 @@ const NoteForms = ({ groups, change }: any): any => {
   }
 
   const saveNote = async (): Promise<void> => {
-    await axios.post(`${mainUrl}/notes`, {
+    await axios.post(`${mainUrl}/notes/note`, {
       title,
       text,
       groups: transformGroups(newGroup),

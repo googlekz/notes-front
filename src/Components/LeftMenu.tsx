@@ -13,7 +13,7 @@ const LeftMenu = ({ groups, change, sortNotes, activeGroup, deleteGroup }: any) 
       alert('Заполнить группу')
       return
     }
-    await axios.post(`${mainUrl}/groups`, {
+    await axios.post(`${mainUrl}/groups/group`, {
       name: group
     })
     setGroup('')
