@@ -7,72 +7,83 @@ import NoteForms from './Components/forms/NoteForms'
 import ModalMain from './Components/modals/ModalMain'
 import { mainUrl } from "./config"
 
-function App (): any {
-  const [rendered, setRendered] = useState(null)
-  const [notes, setNotes] = useState([])
-  const [groups, setGroups] = useState([])
-  const [selectedGroup, setSelectedGroup] = useState({})
-  const [modalActive, setModalActive] = useState(null)
-  const [deleteGroupId, setDeleteGroupId] = useState(null)
+interface paramsNotes {
+    group: Number,
+}
 
-  useEffect(() => {
-    if (!rendered) {
-      // @ts-expect-error TEST
-      setRendered(true)
-      return
+function App(): any {
+    const [rendered, setRendered] = useState(null)
+    const [notes, setNotes] = useState([])
+    const [groups, setGroups] = useState([])
+    const [selectedGroup, setSelectedGroup] = useState({}) as any
+    const [modalActive, setModalActive] = useState(null)
+    const [deleteGroupId, setDeleteGroupId] = useState(null)
+
+    useEffect(() => {
+        if (!rendered) {
+            // @ts-expect-error TEST
+            setRendered(true)
+            return
+        }
+        getNotes()
+        getGroups()
+    }, [rendered]);
+
+    useEffect(() => {
+        if (rendered) {
+            getNotes()
+        }
+    }, [selectedGroup])
+
+    const getNotes = async (): Promise<void> => {
+        const params = {} as paramsNotes;
+        if (selectedGroup?.id) {
+            params.group = selectedGroup.id
+        }
+        const {data} = await axios.get(`${mainUrl}/notes`, {params})
+        setNotes(data)
     }
-    getNotes()
-    getGroups()
-  }, [rendered])
+    const getGroups = async (): Promise<void> => {
+        const {data} = await axios.get(`${mainUrl}/groups`)
+        setGroups(data)
+    }
 
-  const getNotes = async (): Promise<void> => {
-    const { data } = await axios.get(`${mainUrl}/notes`)
-    setNotes(data)
-  }
-  const getGroups = async (): Promise<void> => {
-    const { data } = await axios.get(`${mainUrl}/groups`)
-    setGroups(data)
-  }
+    const deleteNote = async (id: number): Promise<void> => {
+        await axios.delete(`${mainUrl}/notes/${id}`)
+        await refreshData()
+    }
 
-  const deleteNote = async (id: number): Promise<void> => {
-    await axios.delete(`${mainUrl}/notes/${id}`)
-    await refreshData()
-  }
+    const refreshData = async () => {
+        await getNotes()
+        await getGroups()
+    }
 
-  const refreshData = async () => {
-    await getNotes()
-    await getGroups()
-  }
+    const sortNotes = (group: any) => {
+        if (group?.id === selectedGroup?.id) {
+            setSelectedGroup({})
+            return;
+        }
+        setSelectedGroup(group)
+    }
 
-  const sortNotes = async (groupNote: any): Promise<void> => {
-    const check = groupNote === selectedGroup ? null : groupNote?.id
-    const { data } = await axios.get(`${mainUrl}/notes`, {
-      params: {
-        group: check
-      }
-    })
-    setSelectedGroup(check !== null ? groupNote : null)
-    setNotes(data)
-  }
+    const closeModal = (): void => {
+        setModalActive(null)
+    }
 
-  const closeModal = (): void => {
-    setModalActive(null)
-  }
+    const deleteGroup = async (): Promise<void> => {
+        await axios.delete(`${mainUrl}/groups/${deleteGroupId}`)
+        setDeleteGroupId(null)
+        setModalActive(null)
+        await refreshData();
+    }
 
-  const deleteGroup = async (): Promise<void> => {
-    await axios.delete(`${mainUrl}/groups/${deleteGroupId}`)
-    setDeleteGroupId(null)
-    setModalActive(null)
-    await refreshData();
-  }
+    const showDeleteModal = ({id}: any): any => {
+        // @ts-expect-error test
+        setModalActive('delete')
+        setDeleteGroupId(id)
+    }
 
-  const showDeleteModal = ({ id }: any): any => {
-    // @ts-expect-error test
-    setModalActive('delete')
-    setDeleteGroupId(id)
-  }
-
-  return (
+    return (
         <div className="app">
             <LeftMenu
                 activeGroup={selectedGroup}
@@ -104,7 +115,7 @@ function App (): any {
                 typeModal={modalActive}
             />
         </div>
-  )
+    )
 }
 
 export default App
