@@ -1,13 +1,20 @@
 import React from 'react';
 import "./UiBackground.scss"
-const UiBackground = ({bgColor, change, active}: any) => {
+const UiBackground = ({bgColor, change, active, disabled}: any) => {
     const getBackground = () => {
         return {
             background: bgColor || null
         };
     }
+
+    const clickBackground = () => {
+        if (disabled) {
+            return;
+        }
+        change(bgColor)
+    }
     return (
-        <div onClick={() => change(bgColor)} className="background-item">
+        <div onClick={clickBackground} className="background-item">
             {
                 bgColor ?
                     <div

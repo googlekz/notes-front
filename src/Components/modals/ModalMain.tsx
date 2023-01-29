@@ -16,9 +16,9 @@ const ModalMain = ({modalData, closeModal, refreshData, groups}: any) => {
                     className="modal-main__close"
                 />
                 {
-                    (typeModal === 'delete' && modalData?.deleteGroupId !== null)
+                    (typeModal === 'delete' && modalData?.deleteGroup !== null)
                         ? <ModalDelete
-                            groupId={modalData.deleteGroupId}
+                            group={modalData.deleteGroup}
                             closeModal={closeModal}
                             refreshData={refreshData}
                         />

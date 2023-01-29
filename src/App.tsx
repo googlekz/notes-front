@@ -18,7 +18,7 @@ function App(): any {
     const [selectedGroup, setSelectedGroup] = useState({}) as any
     const [modalData, setModalData] = useState({
         modalActive: null,
-        deleteGroupId: null,
+        deleteGroup: null,
         noteActive: null,
     });
 
@@ -61,7 +61,7 @@ function App(): any {
         setModalData({
             // @ts-ignore
             modalActive: 'edit',
-            deleteGroupId: null,
+            deleteGroup: null,
             noteActive: item,
         })
     }
@@ -82,17 +82,17 @@ function App(): any {
     const closeModal = (): void => {
         setModalData({
             modalActive: null,
-            deleteGroupId: null,
+            deleteGroup: null,
             noteActive: null,
         });
     }
 
-    const showDeleteModal = ({id}: any): any => {
+    const showDeleteModal = (group: any): any => {
         setModalData({
             noteActive: null,
             // @ts-ignore
             modalActive: 'delete',
-            deleteGroupId: id,
+            deleteGroup: group,
         })
     }
 
@@ -107,7 +107,7 @@ function App(): any {
             />
             <div className="app__content">
                 <NoteForms
-                    change={refreshData}
+                    change={() => refreshData()}
                     groups={groups}
                 />
                 <div className="app__notes">
