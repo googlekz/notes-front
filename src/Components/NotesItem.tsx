@@ -2,8 +2,9 @@ import React, {useState} from 'react'
 import UiTag from './Ui/UiTag'
 import './NotesItem.scss'
 import UiDelete from './Ui/UiDelete'
+import UiEdit from './Ui/UiEdit'
 
-const NotesItem = ({item, deleteItem}: any) => {
+const NotesItem = ({item, deleteItem, editItem}: any) => {
     const getBackground = () => {
         return {
             background: item.background || null
@@ -36,26 +37,38 @@ const NotesItem = ({item, deleteItem}: any) => {
         deleteItem(item.id)
     }
 
+    const editNote = () => {
+        editItem(item)
+    }
+
     return (
         <div
             className="notes"
             style={getBackground()}
         >
+            <UiEdit
+                className="notes__edit"
+                onClick={editNote}
+            />
             <UiDelete
                 className="notes__delete"
                 onClick={deleteNote}
             />
-            <h4 className="notes__title">{item.title}</h4>
-            <p className="notes__text" dangerouslySetInnerHTML={{__html: getText()}}></p>
-            <div className="notes__buttons">
-                {
-                    item.groups?.map((group: any) =>
-                        <UiTag
-                            key={group.id}
-                            item={group}
-                        />
-                    )
-                }
+            <div
+                className="notes__content"
+            >
+                <h4 className="notes__title">{item.title}</h4>
+                <p className="notes__text" dangerouslySetInnerHTML={{__html: getText()}}></p>
+                <div className="notes__buttons">
+                    {
+                        item.groups?.map((group: any) =>
+                            <UiTag
+                                key={group.id}
+                                item={group}
+                            />
+                        )
+                    }
+                </div>
             </div>
         </div>
     )

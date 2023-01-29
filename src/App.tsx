@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.scss'
 import axios from 'axios'
 import NotesItem from './Components/NotesItem'
@@ -16,8 +16,11 @@ function App(): any {
     const [notes, setNotes] = useState([])
     const [groups, setGroups] = useState([])
     const [selectedGroup, setSelectedGroup] = useState({}) as any
-    const [modalActive, setModalActive] = useState(null)
-    const [deleteGroupId, setDeleteGroupId] = useState(null)
+    const [modalData, setModalData] = useState({
+        modalActive: null,
+        deleteGroupId: null,
+        noteActive: null,
+    });
 
     useEffect(() => {
         if (!rendered) {
@@ -43,6 +46,7 @@ function App(): any {
         const {data} = await axios.get(`${mainUrl}/notes`, {params})
         setNotes(data)
     }
+
     const getGroups = async (): Promise<void> => {
         const {data} = await axios.get(`${mainUrl}/groups`)
         setGroups(data)
@@ -51,6 +55,15 @@ function App(): any {
     const deleteNote = async (id: number): Promise<void> => {
         await axios.delete(`${mainUrl}/notes/${id}`)
         await refreshData()
+    }
+
+    const editNote = async (item: any): Promise<void> => {
+        setModalData({
+            // @ts-ignore
+            modalActive: 'edit',
+            deleteGroupId: null,
+            noteActive: item,
+        })
     }
 
     const refreshData = async () => {
@@ -67,20 +80,20 @@ function App(): any {
     }
 
     const closeModal = (): void => {
-        setModalActive(null)
-    }
-
-    const deleteGroup = async (): Promise<void> => {
-        await axios.delete(`${mainUrl}/groups/${deleteGroupId}`)
-        setDeleteGroupId(null)
-        setModalActive(null)
-        await refreshData();
+        setModalData({
+            modalActive: null,
+            deleteGroupId: null,
+            noteActive: null,
+        });
     }
 
     const showDeleteModal = ({id}: any): any => {
-        // @ts-expect-error test
-        setModalActive('delete')
-        setDeleteGroupId(id)
+        setModalData({
+            noteActive: null,
+            // @ts-ignore
+            modalActive: 'delete',
+            deleteGroupId: id,
+        })
     }
 
     return (
@@ -102,6 +115,7 @@ function App(): any {
                         notes.map((item: any) =>
                             <NotesItem
                                 deleteItem={deleteNote}
+                                editItem={editNote}
                                 key={item.id}
                                 item={item}
                             />
@@ -110,9 +124,10 @@ function App(): any {
                 </div>
             </div>
             <ModalMain
-                deleteGroup={deleteGroup}
+                groups={groups}
+                refreshData={refreshData}
+                modalData={modalData}
                 closeModal={closeModal}
-                typeModal={modalActive}
             />
         </div>
     )

@@ -2,13 +2,17 @@
   height: 100%;
   width: 100%;
   max-width: 300px;
-  padding: 15px;
   margin: auto;
   border: 1px solid #dadada;
-  grid-template-rows: auto 1fr auto;
-  display: grid;
   border-radius: 5px;
   position: relative;
+
+  &__content {
+    padding: 15px;
+    grid-template-rows: auto 1fr auto;
+    display: grid;
+    height: 100%;
+  }
 
   &__title {
     margin-bottom: 15px;
@@ -27,8 +31,12 @@
     top: -5px;
     right: -5px;
   }
+  &__edit {
+    top: -5px;
+    left: -5px;
+  }
   &:hover {
-    .notes__delete {
+    .notes__delete, .notes__edit {
       display: flex;
     }
   }

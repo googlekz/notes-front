@@ -1,32 +1,42 @@
-import React from 'react'
 import './ModalMain.scss'
 import UiDelete from '../Ui/UiDelete'
+import ModalDelete from "./ModalDelete";
+import ModalEdit from "./ModalEdit";
 
-const ModalMain = ({ typeModal, closeModal, deleteGroup }: any) => {
-  if (!typeModal) {
-    return null
-  }
-  return (
+const ModalMain = ({modalData, closeModal, refreshData, groups}: any) => {
+    if (!modalData.modalActive) {
+        return null
+    }
+    const typeModal = modalData.modalActive
+    return (
         <div className="modal-main">
             <div className="modal-main__content">
                 <UiDelete
                     onClick={closeModal}
                     className="modal-main__close"
                 />
-                <h1 className="modal-main__title">Удалить группу?</h1>
-                <div className="modal-main__buttons">
-                    <button
-                        className="modal-main__button modal-main__button_yes"
-                        onClick={deleteGroup}
-                    >Да</button>
-                    <button
-                        className="modal-main__button modal-main__button_no"
-                        onClick={closeModal}
-                    >Нет</button>
-                </div>
+                {
+                    (typeModal === 'delete' && modalData?.deleteGroupId !== null)
+                        ? <ModalDelete
+                            groupId={modalData.deleteGroupId}
+                            closeModal={closeModal}
+                            refreshData={refreshData}
+                        />
+                        : null
+                }
+                {
+                    (typeModal === 'edit' && modalData?.noteActive !== null)
+                        ? <ModalEdit
+                            groups={groups}
+                            note={modalData.noteActive}
+                            closeModal={closeModal}
+                            refreshData={refreshData}
+                        />
+                        : null
+                }
             </div>
         </div>
-  )
+    )
 }
 
 export default ModalMain

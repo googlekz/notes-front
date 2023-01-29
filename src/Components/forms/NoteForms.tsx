@@ -1,82 +1,95 @@
-import React, { useState, useRef } from 'react'
+import React, {useState, useRef} from 'react'
 import axios from 'axios'
 import './NoteForms.scss'
 import BackgroundColors from '../BackgroundColors'
 import useAutosizeTextArea from '../../App/helpers/useAutosizeTextarea'
-import { mainUrl } from "../../config";
+import {mainUrl} from "../../config";
 
-const NoteForms = ({ groups, change }: any): any => {
-  const [title, setTitle] = useState('')
-  const [text, setText] = useState('')
-  const [newGroup, setNewGroup] = useState([])
-  const [activeBg, setActiveBg] = useState(null)
-  const textAreaRef = useRef<HTMLTextAreaElement>(null)
-  useAutosizeTextArea(textAreaRef.current, text)
+const NoteForms = ({groups, change, data}: any): any => {
 
-  const bgColors = [
-    '#f28b82',
-    '#fbbc04',
-    '#fff475',
-    '#ccff90',
-    '#a7ffeb',
-    '#cbf0f8',
-    '#aecbfa',
-    '#d7aefb',
-    '#fdcfe8',
-    '#e6c9a8',
-    '#e8eaed'
-  ]
-  const doSomething = (e: any): void => {
-    e.preventDefault()
-  }
-  const isHaveGroup = (val: string): boolean => {
-    return newGroup.filter((item: any) => item?.name === val).length > 0
-  }
-
-  const clearData = (): void => {
-    setTitle('')
-    setText('')
-    setNewGroup([])
-    setActiveBg(null)
-  }
-
-  const saveNote = async (): Promise<void> => {
-    await axios.post(`${mainUrl}/notes/note`, {
-      title,
-      text,
-      groups: transformGroups(newGroup),
-      background: activeBg
-    })
-    change()
-    clearData()
-  }
-
-  const transformGroups = (arr: any[]): any => {
-    return arr.map((item) => {
-      return item.id
-    })
-  }
-  const toggleGroups = (val: string): any => {
-    const cloneArr = [...newGroup]
-    // @ts-expect-error TEST
-    const indexEl = cloneArr.indexOf(val)
-
-    if (indexEl >= 0) {
-      cloneArr.splice(indexEl, 1)
-      setNewGroup(cloneArr)
-      return
+    const [title, setTitle] = useState(data?.title ? data.title : '')
+    const [text, setText] = useState(data?.text ? data.text : '')
+    const [newGroup, setNewGroup] = useState(data?.groups ? [...data.groups] : [])
+    const [activeBg, setActiveBg] = useState(data?.background ? data.background : null)
+    const textAreaRef = useRef<HTMLTextAreaElement>(null)
+    useAutosizeTextArea(textAreaRef.current, text)
+    const bgColors = [
+        '#f28b82',
+        '#fbbc04',
+        '#fff475',
+        '#ccff90',
+        '#a7ffeb',
+        '#cbf0f8',
+        '#aecbfa',
+        '#d7aefb',
+        '#fdcfe8',
+        '#e6c9a8',
+        '#e8eaed'
+    ]
+    const doSomething = (e: any): void => {
+        e.preventDefault()
+    }
+    const isHaveGroup = (val: any): boolean => {
+        return newGroup.find((item: any) => item?.id === val)
     }
 
-    // @ts-expect-error test
-    setNewGroup([...cloneArr, val])
-  }
-  const getBackground = (): any => {
-    return {
-      background: activeBg ?? null
+    const clearData = (): void => {
+        setTitle('')
+        setText('')
+        setNewGroup([])
+        setActiveBg(null);
+        console.log('clear');
     }
-  }
 
-  return (
+    const saveNote = async (): Promise<void> => {
+        if (data) {
+            change({
+                id: data.id,
+                text: text,
+                title: title,
+                background: activeBg,
+                groups: transformGroups(newGroup),
+            })
+            clearData();
+            return;
+        }
+        if (!title && !text) {
+            textAreaRef?.current?.focus();
+            return;
+        }
+
+        await axios.post(`${mainUrl}/notes/note`, {
+            title,
+            text,
+            groups: transformGroups(newGroup),
+            background: activeBg
+        })
+        clearData()
+    }
+
+    const transformGroups = (arr: any[]): any => {
+        return arr.map((item) => {
+            return item.id
+        })
+    }
+    const toggleGroups = (groupId: number): any => {
+        const cloneArr = [...newGroup];
+        const foundGroup = groups.find((item: any) => item.id === groupId);
+        const indexEl = cloneArr.indexOf(cloneArr.find(foundGroup => foundGroup.id === groupId));
+        if (indexEl >= 0) {
+            cloneArr.splice(indexEl, 1);
+            setNewGroup(cloneArr)
+            return;
+        }
+        setNewGroup([...cloneArr, foundGroup])
+    }
+    const getBackground = (): any => {
+        return {
+            background: activeBg ?? null
+        }
+    }
+
+    return (
         <form
             className="note-forms"
             onSubmit={doSomething}
@@ -85,7 +98,9 @@ const NoteForms = ({ groups, change }: any): any => {
             <input
                 style={getBackground()}
                 value={title}
-                onChange={(e) => { setTitle(e.target.value) }}
+                onChange={(e) => {
+                    setTitle(e.target.value)
+                }}
                 placeholder='Заголовок'
                 className="note-forms__input note-forms__input_title"
                 type="text"
@@ -94,7 +109,9 @@ const NoteForms = ({ groups, change }: any): any => {
                 ref={textAreaRef}
                 style={getBackground()}
                 value={text}
-                onChange={(e) => { setText(e.target.value) }}
+                onChange={(e) => {
+                    setText(e.target.value)
+                }}
                 placeholder='Заметка'
                 className="note-forms__input note-forms__input_text"
             />
@@ -103,9 +120,11 @@ const NoteForms = ({ groups, change }: any): any => {
                     groups.map((group: any) =>
                         <button
                             key={group.id}
-                            onClick={() => { toggleGroups(group) }}
+                            onClick={() => {
+                                toggleGroups(group.id)
+                            }}
                             className={
-                                `note-forms__group ${isHaveGroup(group.name) ? 'note-forms__group_active' : null}`
+                                `note-forms__group ${isHaveGroup(group.id) ? 'note-forms__group_active' : null}`
                             }
                         >
                             {group.name}
@@ -123,14 +142,16 @@ const NoteForms = ({ groups, change }: any): any => {
                 <button
                     className="note-forms__button"
                     onClick={clearData}
-                >Очистить</button>
+                >Очистить
+                </button>
                 <button
                     onClick={saveNote}
                     className="note-forms__button"
-                >Сохранить</button>
+                >Сохранить
+                </button>
             </div>
         </form>
-  )
+    )
 }
 
 export default NoteForms
