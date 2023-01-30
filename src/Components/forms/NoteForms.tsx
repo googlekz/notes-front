@@ -5,15 +5,16 @@ import BackgroundColors from '../BackgroundColors'
 import useAutosizeTextArea from '../../App/helpers/useAutosizeTextarea'
 import {mainUrl} from "../../config";
 
-const NoteForms = ({groups, change, data}: any): any => {
+const NoteForms = ({groups, change, data, selectedGroup}: any): any => {
     const getNewGroup = () => {
-        let res: any = data?.groups ? [...data.groups] : [];
+        let res: any = data?.groups ? [...data.groups] : [selectedGroup];
         if (res.length === 0 && localStorage.getItem('groups')) {
             // @ts-ignore
             res = JSON.parse(localStorage.getItem('groups'))
         }
         return res;
     }
+
     const getText = () => {
         let res = data?.text ? data.text : '';
         if (!res) {
@@ -21,6 +22,7 @@ const NoteForms = ({groups, change, data}: any): any => {
         }
         return res;
     }
+
     const getTitle = () => {
         let res = data?.title ? data.title : '';
         if (!res) {
@@ -44,6 +46,9 @@ const NoteForms = ({groups, change, data}: any): any => {
     const [activeBg, setActiveBg] = useState(getActiveBg())
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
+    useEffect(() => {
+        setNewGroup(getNewGroup());
+    }, [selectedGroup])
     // @ts-ignore
     useAutosizeTextArea(textAreaRef.current, text);
 

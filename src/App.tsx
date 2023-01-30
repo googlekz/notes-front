@@ -107,6 +107,7 @@ function App(): any {
             />
             <div className="app__content">
                 <NoteForms
+                    selectedGroup={selectedGroup}
                     change={() => refreshData()}
                     groups={groups}
                 />
