@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import UiMenuItem from './Ui/UiMenuItem'
 import './LeftMenu.scss'
-import {mainUrl} from "../config";
+import { mainUrl } from '../config'
 
-const LeftMenu = ({ groups, change, sortNotes, activeGroup, deleteGroup }: any) => {
+const LeftMenu = ({ groups, change, sortNotes, activeGroup, deleteGroup }: any): any => {
   const defaultAddPlaceholder = 'Добавить группу'
   const [group, setGroup] = useState('')
 
-  const addGroup = async () => {
+  const addGroup = async (): Promise<any> => {
     if (!group || group.length < 1) {
       alert('Заполнить группу')
       return
@@ -54,6 +54,7 @@ const LeftMenu = ({ groups, change, sortNotes, activeGroup, deleteGroup }: any) 
                         />
                         <button
                             className="left-menu__add-button"
+                            /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
                             onClick={addGroup}
                         >+</button>
                     </div>

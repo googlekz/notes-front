@@ -1,47 +1,47 @@
-import React, {useState} from 'react'
+import React from 'react'
 import UiTag from './Ui/UiTag'
 import './NotesItem.scss'
 import UiDelete from './Ui/UiDelete'
 import UiEdit from './Ui/UiEdit'
 
-const NotesItem = ({item, deleteItem, editItem}: any) => {
-    const getBackground = () => {
-        return {
-            background: item.background || null
-        }
+const NotesItem = ({ item, deleteItem, editItem }: any): any => {
+  const getBackground = (): any => {
+    return {
+      background: item.background || null
     }
+  }
 
-    const getText = () => {
-        return setLinksInStr(item.text)
+  const getText = (): any => {
+    return setLinksInStr(item.text)
+  }
+
+  const setLinksInStr = (str: string): any => {
+    let localStr = str
+    if (!localStr) {
+      return localStr
     }
-
-    const setLinksInStr = (str: string) => {
-        let localStr = str;
-        if (!localStr) {
-            return localStr
-        }
-        const arrLinks: string[] | null = localStr.match(/https:\/\/[\w\-./]+/g)
-        if ((arrLinks != null) && arrLinks.length > 0) {
-            arrLinks.forEach((item: string) => {
-                localStr = localStr.replace(item, addLink(item))
-            })
-        }
-        return localStr
+    const arrLinks: string[] | null = localStr.match(/https:\/\/[\w\-./]+/g)
+    if ((arrLinks != null) && arrLinks.length > 0) {
+      arrLinks.forEach((item: string) => {
+        localStr = localStr.replace(item, addLink(item))
+      })
     }
+    return localStr
+  }
 
-    const addLink = (str: string) => {
-        return `<a href="${str}" target="_blank">${str}</a>`
-    }
+  const addLink = (str: string): string => {
+    return `<a href="${str}" target="_blank">${str}</a>`
+  }
 
-    const deleteNote = () => {
-        deleteItem(item.id)
-    }
+  const deleteNote = (): void => {
+    deleteItem(item.id)
+  }
 
-    const editNote = () => {
-        editItem(item)
-    }
+  const editNote = (): void => {
+    editItem(item)
+  }
 
-    return (
+  return (
         <div
             className="notes"
             style={getBackground()}
@@ -58,7 +58,7 @@ const NotesItem = ({item, deleteItem, editItem}: any) => {
                 className="notes__content"
             >
                 <h4 className="notes__title">{item.title}</h4>
-                <p className="notes__text" dangerouslySetInnerHTML={{__html: getText()}}></p>
+                <p className="notes__text" dangerouslySetInnerHTML={{ __html: getText() }}></p>
                 <div className="notes__buttons">
                     {
                         item.groups?.map((group: any) =>
@@ -71,7 +71,7 @@ const NotesItem = ({item, deleteItem, editItem}: any) => {
                 </div>
             </div>
         </div>
-    )
+  )
 }
 
 export default NotesItem

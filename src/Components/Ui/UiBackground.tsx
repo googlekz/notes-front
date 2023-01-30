@@ -1,24 +1,25 @@
-import React from 'react';
-import "./UiBackground.scss"
-const UiBackground = ({bgColor, change, active, disabled}: any) => {
-    const getBackground = () => {
-        return {
-            background: bgColor || null
-        };
+import React from 'react'
+import './UiBackground.scss'
+const UiBackground = ({ bgColor, change, active, disabled }: any): any => {
+  const getBackground = (): any => {
+    return {
+      background: bgColor || null
     }
+  }
 
-    const clickBackground = () => {
-        if (disabled) {
-            return;
-        }
-        change(bgColor)
+  const clickBackground = (): void => {
+    if (disabled) {
+      return
     }
-    return (
+    change(bgColor)
+  }
+  return (
         <div onClick={clickBackground} className="background-item">
             {
-                bgColor ?
-                    <div
+                bgColor
+                  ? <div
                         className={
+                          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                             `background-item__color ${bgColor === active ? 'background-item__color_active' : null}`
                         }
                         style={getBackground()}
@@ -33,9 +34,9 @@ const UiBackground = ({bgColor, change, active, disabled}: any) => {
                             <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path>
                         </svg>
                     </div>
-                    :
-                    <div
+                  : <div
                         className={
+                          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                             `background-item__color ${bgColor === active ? 'background-item__color_active' : null}`
                         }
                     >
@@ -61,7 +62,7 @@ const UiBackground = ({bgColor, change, active, disabled}: any) => {
 
             }
         </div>
-    );
-};
+  )
+}
 
-export default UiBackground;
+export default UiBackground

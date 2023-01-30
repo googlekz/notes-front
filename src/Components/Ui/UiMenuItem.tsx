@@ -1,18 +1,18 @@
-import React from 'react';
-import "./UiMenuItem.scss"
-import UiDelete from "./UiDelete";
-const UiMenuItem = ({ item, onClick, activeGroup, deleteGroup }: any) => {
-    const getClass = () => {
-        return `menu-item ${
+import React from 'react'
+import './UiMenuItem.scss'
+import UiDelete from './UiDelete'
+const UiMenuItem = ({ item, onClick, activeGroup, deleteGroup }: any): any => {
+  const getClass = (): string => {
+    return `menu-item ${
             activeGroup?.id === item.id ? 'menu-item_active' : ''
         }`
-    };
+  }
 
-    const getCountNotes = () => {
-        return item?.count_notes || null
-    };
+  const getCountNotes = (): number | null => {
+    return item?.count_notes || null
+  }
 
-    return (
+  return (
         <div className={getClass()}>
             <p
                 onClick={() => onClick(item)}
@@ -20,7 +20,8 @@ const UiMenuItem = ({ item, onClick, activeGroup, deleteGroup }: any) => {
             >
                 {
                     getCountNotes()
-                    ? <span className='menu-item__text_count'>{ getCountNotes() }</span> : null
+                      ? <span className='menu-item__text_count'>{ getCountNotes() }</span>
+                      : null
                 }
                 { item.name }
             </p>
@@ -29,7 +30,7 @@ const UiMenuItem = ({ item, onClick, activeGroup, deleteGroup }: any) => {
                 onClick={() => deleteGroup(item)}
             />
         </div>
-    );
-};
+  )
+}
 
-export default UiMenuItem;
+export default UiMenuItem
