@@ -35,7 +35,7 @@ const LeftMenu = ({ groups, change, sortNotes, activeGroup, deleteGroup }: any):
                                     <UiMenuItem
                                         deleteGroup={deleteGroup}
                                         activeGroup={activeGroup}
-                                        onClick={sortNotes}
+                                        onClick={() => sortNotes(group)}
                                         item={group}
                                     />
                                 </li>

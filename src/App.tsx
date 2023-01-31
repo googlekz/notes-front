@@ -20,9 +20,7 @@ function App (): any {
 
   useEffect(() => {
     void (async () => {
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       if (!rendered) {
-        // eslint-disable-next-line
         setRendered(true)
         return
       }
@@ -31,17 +29,14 @@ function App (): any {
   }, [rendered])
 
   useEffect(() => {
-    void (async () => {
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      if (rendered) {
-        await getNotes()
-      }
-    })
+    if (rendered) {
+      void getNotes().then(r => {})
+    }
   }, [selectedGroup])
 
   const getNotes = async (): Promise<void> => {
     const params = {} as any
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+
     if (selectedGroup?.id) {
       params.group = selectedGroup.id
     }
@@ -72,7 +67,9 @@ function App (): any {
     await getGroups()
   }
 
-  const sortNotes = (group: any): void => {
+  const sortNotes = async (group: any): Promise<void> => {
+    console.log('sort: ', group.id)
+    console.log('selectedGroup: ', selectedGroup.id)
     if (group?.id === selectedGroup?.id) {
       setSelectedGroup({})
       return
